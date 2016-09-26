@@ -216,7 +216,8 @@ server {
           gzip_types text/plain application/javascript application/x-javascript text/javascript text/xml text/css;
           gzip_vary on;
 
-          root   /usr/share/nginx/html;
+#          root   /usr/share/nginx/html;
+          root  /etc/nginx/html;
           index  public/pages/index.html public/pages/index.html;
           include /etc/nginx/mime.types;
     }
