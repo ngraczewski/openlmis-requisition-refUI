@@ -8,8 +8,4 @@ services:
       - './build.sh'
   image:
     build: .
-    image: openlmis/requisition-refui-prod
-
-  devImage:
-    build: ./developer/
-    image: openlmis/requisition-refui-prod
+    image: openlmis/requisition-refui
