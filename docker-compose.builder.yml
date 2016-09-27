@@ -9,3 +9,7 @@ services:
   image:
     build: .
     image: openlmis/requisition-refui-prod
+
+  devImage:
+    build: ./developer/
+    image: openlmis/requisition-refui-prod
