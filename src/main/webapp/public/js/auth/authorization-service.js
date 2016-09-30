@@ -25,6 +25,7 @@
     service.preAuthorize = preAuthorize;
     service.preAuthorizeReporting = preAuthorizeReporting;
     service.hasPermission = hasPermission;
+    service.authorizeRequest = authorizeRequest;
 
     service.getUserInfo = getUserInfo; 
 
@@ -155,6 +156,13 @@
       var permissions = Array.prototype.slice.call(arguments);
       return hasRight(permissions);
     };
+
+    function authorizeRequest(request) {
+      if (request.url.indexOf('oauth/token') === -1) {
+        request.url += '?access_token=' +localStorageService.get(localStorageKeys.ACCESS_TOKEN);
+      }
+      return request;
+    }
 
     return service;
   }

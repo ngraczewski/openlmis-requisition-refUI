@@ -22,7 +22,7 @@
                 $window.location.assign('/public/pages/login.html');
             } else if(AuthorizationService.isAuthenticated() && $window.location.href.indexOf('login.html') >= 0) {
                 // if authenticated and on login page
-                $window.location.assign('/public/pages/index.html');
+                $window.location.assign('/public/index.html');
             }
         });
     }

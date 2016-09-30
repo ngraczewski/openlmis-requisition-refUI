@@ -15,7 +15,7 @@ describe("AuthInterceptor", function() {
     module('openlmis');
 
     $window = {location: { 
-            href: '/public/pages/index.html',
+            href: '/public/index.html',
             assign: jasmine.createSpy()
         }};
 
@@ -59,7 +59,7 @@ describe("AuthInterceptor", function() {
     $window.location.href ='/public/pages/login.html';
     $rootScope.$broadcast('$routeChangeStart');
 
-    expect($window.location.assign).toHaveBeenCalledWith('/public/pages/index.html');
+    expect($window.location.assign).toHaveBeenCalledWith('/public/index.html');
     expect($window.location.assign.calls.length).toEqual(1);
 
   });

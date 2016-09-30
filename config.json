@@ -1,6 +1,7 @@
 {
   "app": {
     "src": "./src/main",
+    "tmp": "./tmp",
     "dest": "./build"
   },
   "openlmisServerURL": "http://localhost"
