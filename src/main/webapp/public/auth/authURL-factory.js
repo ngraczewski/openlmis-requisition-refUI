@@ -11,53 +11,32 @@
  (function(){
  	"use strict";
 
- 	angular.module("openlmis-core")
-		.constant("OpenlmisServerURL", function(){
-			// The serverURL can be set with a grunt build argument
-			// --serverURL=http://openlmis.server:location
-			var serverURL = "@@OPENLMIS_SERVER_URL";
-			if(serverURL.substr(0,2) == "@@"){
-				return false;
-			} else {
-				return serverURL;
-			}
-	}());
-
  	angular.module("openlmis-auth")
- 		.constant("AuthServiceURL", function(){
- 			// The authUrl can be set with a grunt build argument
- 			// --AuthServiceURL=http://auth.service:location
- 			var authUrl = "@@AUTH_SERVICE_URL";
- 			if(authUrl.substr(0,2) == "@@"){
- 				return false;
- 			} else {
- 				return authUrl;
- 			}
- 		}());
+ 		.config(setAuthURL);
+
+ 	setAuthURL.$inject = ['$provide', 'OpenlmisServerURL', 'PathFactory'];
+ 	function setAuthURL($provide, OpenlmisServerURL, PathFactory){
+		// The authUrl can be set with a grunt build argument
+		// --AuthServiceURL=http://auth.service:location
+		var authUrl = "@@AUTH_SERVICE_URL";
+		if(authUrl.substr(0,2) == "@@"){
+			authUrl = "";
+		}
+
+		if( authUrl.substr(0,4).toLowerCase() != 'http' && OpenlmisServerURL.substr(0,4).toLowerCase() == 'http' ){
+			authUrl = PathFactory(OpenlmisServerURL, authUrl);
+		}
+		
+		$provide.constant('AuthServiceURL', authUrl);
+ 	}
 
  	angular.module("openlmis-auth")
  		.factory("AuthURL", AuthURL);
 
- 	function AuthURL(AuthServiceURL, OpenlmisServerURL){
- 		var rootUrl = "";
-
- 		if(OpenlmisServerURL){
- 			rootUrl = OpenlmisServerURL;
- 		}
- 		if(AuthServiceURL){
- 			rootUrl = AuthServiceURL;
- 		}
-
- 		// remove trailing slash if entered into server...
- 		if(rootUrl.substr(-1) == "/"){
- 			rootUrl = rootUrl.substr(0, rootUrl.length-1);
- 		}
-
+ 	AuthURL.$inject = ['AuthServiceURL', 'PathFactory'];
+ 	function AuthURL(AuthServiceURL, PathFactory){
  		return function(url){
- 			if(url[0] == "/"){
- 				url = url.substr(1);
- 			}
- 			return rootUrl + "/" + url;
+ 			return PathFactory(AuthServiceURL, url);
  		}
  	}
 
