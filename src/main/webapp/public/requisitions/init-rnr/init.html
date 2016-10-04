@@ -31,7 +31,7 @@
       <input id="supervisedFacilityRnr" type="radio"
              ng-model="selectedType" value="1"
              ng-checked="selectedType==1"
-             ng-change="loadFacilityData(selectedType);"/>
+             ng-change="loadFacilityData(selectedType);" disabled/>
       &nbsp;<label for="supervisedFacilityRnr"><strong
       openlmis-message="label.supervised.Facility"></strong></label>
     </div>
@@ -71,7 +71,7 @@
   </div>
 
 
-  <div ng-show="selectedType == 1">
+  <div ng-show="selectedType == 1"> // disabled
     <div class="row-fluid">
       <div class="span12">
         <label openlmis-message="label.program"></label>
@@ -126,7 +126,7 @@
 
   <div class="row-fluid init-rnr-grid" ng-show="selectedProgram && selectedFacilityId && !(periodGridData.length == 0)">
     <div class="span6">
-      <div class="gridStyle small" ng-grid="periodGridOptions"
+      <div class="gridStyle small" ui-grid="periodGridOptions"
            ng-show="selectedProgram && selectedFacilityId && !(periodGridData.length == 0)"></div>
     </div>
   </div>
