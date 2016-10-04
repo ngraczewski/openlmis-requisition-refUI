@@ -26,6 +26,11 @@
     }).state('app.home', {
         url: '/home',
         templateUrl: 'home.html'
+    })
+    .state('app.rnr.init', {
+        url: '/rnr/init',
+        templateUrl: 'pages/logistics/rnr/partials/create/init.html',
+        controller: 'InitiateRnrController'
     });
 
     $urlRouterProvider.otherwise("/home");
