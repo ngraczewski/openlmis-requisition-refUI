@@ -1,0 +1,66 @@
+<div id="viewRnr" class="rnr-table" adjust-height>
+    <div class="float-left left-table">
+        <table class="table table-bordered" fixed-table-header>
+            <thead>
+            <tr>
+                <th class="col-{{column.name}}" ng-repeat="column in visibleColumns.nonFullSupply.fixed"
+                    ng-bind="column.label"></th>
+            </tr>
+            </thead>
+
+            <tbody ng-repeat="product in products">
+            <tr>
+                <td id="category_{{$index}}" class="productCategory"
+                    colspan="{{visibleColumns.nonFullSupply.fixed.length}}"
+                    ng-show="showCategory($index)"
+                    ng-bind="product.productCategory"></td>
+            </tr>
+            <tr>
+                <td class="cell-input col-{{ column.name }}"
+                    ng-repeat="column in visibleColumns.nonFullSupply.fixed">
+        <span ng-bind="product[column.name]" id="{{column.name + '_' + $parent.$index}}"
+              class="cell-text"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="float-left right-table" custom-horizontal-scroll adjust-height>
+        <table id="nonFullSupplyTable" fixed-table-header class="table table-bordered scrollable">
+            <thead>
+            <tr>
+                <th class="col-{{column.name}}" ng-repeat="column in visibleColumns.nonFullSupply.scrollable"
+                    ng-bind="column.label"></th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="product in products">
+            <tr>
+                <td class="productCategory" colspan="{{visibleColumns.nonFullSupply.scrollable.length}}"
+                    ng-show="showCategory($index)"></td>
+            </tr>
+            <tr>
+                <td class="cell-input col-{{ column.name }}"
+                    ng-repeat="column in visibleColumns.nonFullSupply.scrollable">
+        <span ng-switch on="column.name">
+            <span ng-switch-when="price">
+              <span ng-bind='product[column.name] | currency:currency' id="{{getId(column.name, $parent)}}"
+                    class="cell-text"></span>
+            </span>
+
+            <span ng-switch-when="cost">
+              <span ng-bind='product[column.name] | currency:currency' id="{{getId(column.name, $parent)}}"
+                    class="cell-text"></span>
+            </span>
+
+            <span ng-switch-default>
+              <span ng-bind="product[column.name]" id="{{getId(column.name, $parent)}}"
+                    class="cell-text"></span>
+              </span>
+        </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="clear-both"></div>
+</div>

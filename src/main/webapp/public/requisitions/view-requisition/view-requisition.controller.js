@@ -12,15 +12,16 @@
 
     angular.module('rnr').controller('ViewRequisitionCtrl', ViewRequisitionCtrl);
 
-    ViewRequisitionCtrl.$inject = ['$scope', 'requisition', '$dialog',  '$location', '$routeParams'];
+    ViewRequisitionCtrl.$inject = ['$scope', 'requisition', 'template', '$dialog',  '$location', '$routeParams'];
 
-    function ViewRequisitionCtrl($scope, requisition, $dialog, $location, $routeParams){
+    function ViewRequisitionCtrl($scope, requisition, template, $dialog, $location, $routeParams){
         $scope.ErrorId = false;
         $scope.visibility = {'visibility': 'hidden'};
 
         // NOTE: the state where requisition could be undefined is impossible
         // because of the resolve from the URL parameter 
         $scope.rnr = new Rnr(requisition.data);
+        $scope.columns = template;
 
         $(document).ready(function(){
                 $scope.visibility = {'visibility': 'visible'};

@@ -25,6 +25,19 @@
             });
 
           return deferred.promise;
+        },
+        template: function($q, $http, $stateParams, RequisitionURL) {
+          var deferred = $q.defer();
+
+          $http.get(RequisitionURL('/api/requisitionTemplates/' + $stateParams.rnr))
+            .then(function(response) {
+              deferred.resolve(response);
+            }, function(response) {
+              alert('Cannot find template for requisition with UUID: ' + $stateParams.rnr);
+              deferred.reject();
+            });
+
+          return deferred.promise;
         }
 		  }
 		});
