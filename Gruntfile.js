@@ -75,8 +75,14 @@ module.exports = function(grunt) {
       }
     },
     karma: {
-      unit: {
+      options: {
         configFile: 'karma.config.js'
+      },
+      unit: {
+        // default
+      },
+      tdd: {
+        singleRun: false
       }
     },
     replace: {
@@ -341,7 +347,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('serve', ['serve:proxy', 'connect:server']);
 
-  var buildTasks = ['clean', 'copy', 'concat', 'sass', 'replace', 'karma']
+  var buildTasks = ['clean', 'copy', 'concat', 'sass', 'replace', 'karma:unit']
   if(grunt.option('production')) buildTasks.push('uglify');
   grunt.registerTask('build', buildTasks);
   
