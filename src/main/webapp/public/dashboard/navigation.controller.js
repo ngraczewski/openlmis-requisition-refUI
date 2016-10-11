@@ -14,8 +14,69 @@
   angular.module('openlmis-dashboard')
     .controller('NavigationController', NavigationController);
 
-  NavigationController.$inject = ['$scope', 'ConfigSettingsByKey', 'localStorageService', 'Locales', '$location', '$window'] 
-  function NavigationController($scope, ConfigSettingsByKey, localStorageService, Locales, $location, $window) {
+  NavigationController.$inject = ['$scope', '$state', 'AuthorizationService'] 
+  function NavigationController($scope, $state, AuthorizationService) {
+    
+    var navigationStates = {};
+
+    this.navigation = parseNaviationStates($state.get());
+
+    this.getChildStatesFor = getChildStatesFor;
+    this.getStateLabel = getStateLabel;
+
+    this.isStateVisible = isStateVisible;
+
+
+    function parseNaviationStates(states){
+      states.forEach(function(state){
+        if(state.showInNavigation){
+          navigationStates[state.name] = state;
+        }
+      });
+
+      var topLevelStates = [];
+      angular.forEach(navigationStates, function(state){
+        var parentStateName = getParentStateName(state.name);
+        if(parentStateName){
+          addChildStateTo(parentStateName, state.name);
+        } else {
+          topLevelStates.push(state.name);
+        }
+      });
+      return topLevelStates;
+    }
+
+    function getParentStateName(stateName){
+      var pieces = stateName.split('.');
+      if(pieces.length > 1){
+        pieces.pop();
+        var searchName = pieces.join('.');
+        var stateNames = Object.keys(navigationStates);
+        for(var i=0; i < stateNames.length; i++){
+          if(stateNames[i] == searchName){
+            return stateNames[i];
+          }
+        }
+      }
+      return false;
+    }
+
+    function addChildStateTo(parentStateName, stateName){
+      
+    }
+
+    function isStateVisible(stateName){
+      return true;
+    }
+
+    function getChildStatesFor(stateName){
+      return [];
+    }
+
+    function getStateLabel(stateName){
+      return "State Label";
+    }
+
     /*
     ConfigSettingsByKey.get({key: 'LOGIN_SUCCESS_DEFAULT_LANDING_PAGE'}, function (data){
       $scope.homePage =  data.settings.value;
