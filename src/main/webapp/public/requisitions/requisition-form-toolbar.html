@@ -1,0 +1,10 @@
+<div form-toolbar id="action_buttons" class="action-buttons">
+    <div class="form-cell button-row">
+        <input id="saveRnrButton" ng-disabled="formDisabled" type="button" ng-click="saveRnr(null)"
+               class="btn btn-primary save-button"
+               openlmis-message="button.save"/>
+    </div>
+    <div class="toolbar-error" id="saveFailMessage" openlmis-message="error" ng-show="error"></div>
+    <div class="toolbar-success" id="saveSuccessMsgDiv" fade-out="3000" openlmis-message="message"
+         ng-show="message"></div>
+</div>
