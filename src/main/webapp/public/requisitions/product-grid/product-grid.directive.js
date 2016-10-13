@@ -31,7 +31,8 @@
           columnDefs.push({
             field: column,
             displayName: column.name,
-            cellFilter: 'numberFilter'
+            cellFilter: 'numberFilter',
+            cellTemplate: '<product-grid-cell row="row" col="col" type="grid.appScope.columns[col.field].source"></product-grid-cell>'
           });
         }
 

@@ -1,0 +1,4 @@
+<div class="ui-grid-cell-contents">
+	<input ng-if="userInput" type="number" ng-model="row.entity[col.field]">
+	<div ng-if="!userInput" ng-bind="row.entity[col.field]"></div>
+</div>
