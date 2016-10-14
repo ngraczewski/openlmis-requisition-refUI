@@ -12,9 +12,10 @@
 
     angular.module('openlmis.requisitions').controller('RequisitionCtrl', RequisitionCtrl);
 
-    RequisitionCtrl.$inject = ['$scope', 'requisition', 'RequisitionTemplate', '$stateParams'];
+    RequisitionCtrl.$inject = ['$scope', 'requisition', 'RequisitionTemplate', '$stateParams',
+    'Requisition'];
 
-    function RequisitionCtrl($scope, requisition, RequisitionTemplate, $stateParams){
+    function RequisitionCtrl($scope, requisition, RequisitionTemplate, $stateParams, Requisition){
 
         RequisitionTemplate.get({
             id: $stateParams.rnr
@@ -29,7 +30,7 @@
         this.rnr = $scope.rnr;
 
         $scope.save = function() {
-
+            Requisition.save(this.rnr);
         };
     }
 })();

@@ -7,7 +7,10 @@
   requisition.$inject = ['$resource', 'RequisitionURL'];
 
   function requisition($resource, RequisitionURL) {
-    return $resource(RequisitionURL('/api/requisitions/:id'));
+    return $resource(RequisitionURL('/api/requisitions/:id', {id: '@id'}, {
+        'save': {method: 'PUT'},
+        'get': {method: 'GET'}
+    }));
   }
 
 })();
