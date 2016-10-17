@@ -32,7 +32,17 @@
         this.rnr = $scope.rnr;
 
         $scope.save = function() {
-            Requisition.save({id: this.rnr.id}, this.rnr);
+            Requisition.save({id: this.rnr.id}, this.rnr)
+            .$promise.then(
+            function(value) {
+                $scope.message = "Requisition saved successfuly!";
+                $scope.error = "";
+            },
+            function(error) {
+                $scope.error = "There was an error saving this requisition.";
+                $scope.message = "";
+            }
+            )
         };
     }
 })();

@@ -8,8 +8,8 @@
 
   function Requisition($resource, RequisitionURL) {
     return $resource(RequisitionURL('/api/requisitions/:id', {id: '@id'}, {
-        'save': {method: 'PUT'},
-        'get': {method: 'GET'}
+        save: {method: 'PUT'},
+        get: {method: 'GET'}
     }));
   }
 
