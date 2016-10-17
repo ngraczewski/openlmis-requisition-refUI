@@ -32,7 +32,7 @@
         this.rnr = $scope.rnr;
 
         $scope.save = function() {
-            Requisition.save(this.rnr);
+            Requisition.save({id: this.rnr.id}, this.rnr);
         };
     }
 })();

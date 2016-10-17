@@ -1,23 +1,23 @@
 (function() {
 
-	'use strict';
+   'use strict';
 
-	angular.module('openlmis.requisitions').factory('User', User);
-	angular.module('openlmis.requisitions').factory('PeriodsForProgramAndFacility', PeriodsForProgramAndFacility);
-	angular.module('openlmis.requisitions').factory('RequisitionsForProgramAndFacility', RequisitionsForProgramAndFacility);
+   angular.module('openlmis.requisitions').factory('User', User);
+   angular.module('openlmis.requisitions').factory('PeriodsForProgramAndFacility', PeriodsForProgramAndFacility);
+   angular.module('openlmis.requisitions').factory('RequisitionsForProgramAndFacility', RequisitionsForProgramAndFacility);
 
 
-	User.$inject = ['OpenlmisURL', '$resource'];
-	PeriodsForProgramAndFacility.$inject = ['RequisitionURL', '$resource'];
-	RequisitionsForProgramAndFacility.$inject = ['RequisitionURL', '$resource'];
+   User.$inject = ['OpenlmisURL', '$resource'];
+   PeriodsForProgramAndFacility.$inject = ['RequisitionURL', '$resource'];
+   RequisitionsForProgramAndFacility.$inject = ['RequisitionURL', '$resource'];
 
-	function User(OpenlmisURL, $resource) {
-		return $resource(OpenlmisURL('/referencedata/api/users/:id'), {
+   function User(OpenlmisURL, $resource) {
+      return $resource(OpenlmisURL('/referencedata/api/users/:id'), {
             id: '@id'
         });
-	}
+   }
 
-	function PeriodsForProgramAndFacility(RequisitionURL, $resource) {
+   function PeriodsForProgramAndFacility(RequisitionURL, $resource) {
         return $resource(RequisitionURL('/api/requisitions/periods-for-initiate'), {}, {
             get: {
                 method: 'GET',
@@ -27,7 +27,7 @@
                     if(!Array.isArray(data)){
                         return [];
                     }
-                    
+
                     data.forEach(function(period){
                         period.startDate = new Date(period.startDate.join('-'));
                         period.endDate = new Date(period.endDate.join('-'));
@@ -47,14 +47,7 @@
         });
     }
 
-    function Requisition(RequisitionURL, $resource) {
-        return $resource(RequisitionURL('/api/requisitions/:id'), {
-            id: '@id'
-        }, {
-            initiate : {
-                url: RequisitionURL('/api/requisitions/initiate'),
-                method: 'POST'
-            }
-        });
+    function InitiateRequisition(RequisitionURL, $resource) {
+        return $resource(RequisitionURL('/api/requisitions/initiate'));
     }
 })();

@@ -14,9 +14,12 @@
 
     angular.module('openlmis.requisitions').controller('InitiateRnrController', InitiateRnrController);
 
-    InitiateRnrController.$inject = ['$scope', 'localStorageService', 'navigateBackService', 'messageService', '$timeout', 'User', 'PeriodsForProgramAndFacility', 'RequisitionsForProgramAndFacility', 'Requisition', '$state'];
+    InitiateRnrController.$inject = ['$scope', 'localStorageService', 'navigateBackService',
+    'messageService', '$timeout', 'User', 'PeriodsForProgramAndFacility',
+    'RequisitionsForProgramAndFacility', 'InitiateRequisition', '$state'];
 
-    function InitiateRnrController($scope, localStorageService, navigateBackService, messageService, $timeout, User, PeriodsForProgramAndFacility, RequisitionsForProgramAndFacility, Requisition, $state) {
+    function InitiateRnrController($scope, localStorageService, navigateBackService, messageService,
+     $timeout, User, PeriodsForProgramAndFacility, RequisitionsForProgramAndFacility, Requisition, $state) {
         var isNavigatedBack;
 
         $scope.selectedRnrType = {"name": "Regular", "emergency": false}; // TODO emergency (for now always false)
@@ -35,7 +38,8 @@
             $scope.error = null;
         },
         optionMessage = function (entity, defaultMessage) {
-            return entity === undefined || _.isEmpty(entity) ? messageService.get("label.none.assigned") : defaultMessage;
+            return entity === undefined || _.isEmpty(entity) ?
+            messageService.get("label.none.assigned") : defaultMessage;
         },
         createPeriodWithRnrStatus = function (periods) {
             if (periods === null || periods.length === 0) {
@@ -49,7 +53,8 @@
             $scope.periodGridData = [];
 
             periods.forEach(function (period, idx) {
-                RequisitionsForProgramAndFacility.get({processingPeriod: period.id, program: $scope.selectedProgram.id, facility: $scope.selectedFacilityId},
+                RequisitionsForProgramAndFacility.get({processingPeriod: period.id, program:
+                $scope.selectedProgram.id, facility: $scope.selectedFacilityId},
                     function (data) {
                         var rnr, 
                             firstPeriodWithRnrStatus,
@@ -176,8 +181,10 @@
             enableSorting: false, 
             columnDefs: [
                 {field: 'name', displayName: messageService.get("label.periods")},
-                {field: 'startDate', displayName: messageService.get("period.header.startDate"), type: 'date', cellFilter: 'date:\'yyyy-MM-dd\''},
-                {field: 'endDate', displayName: messageService.get("period.header.endDate"), type: 'date', cellFilter: 'date:\'yyyy-MM-dd\''},
+                {field: 'startDate', displayName: messageService.get("period.header.startDate"),
+                 type: 'date', cellFilter: 'date:\'yyyy-MM-dd\''},
+                {field: 'endDate', displayName: messageService.get("period.header.endDate"),
+                 type: 'date', cellFilter: 'date:\'yyyy-MM-dd\''},
                 {field: 'rnrStatus', displayName: messageService.get("label.rnr.status") },
                 {name: 'proceed', displayName: '', cellTemplate:
                 '/public/requisitions/init-rnr-button.html'}
@@ -208,7 +215,8 @@
                 return;
             }
 
-            PeriodsForProgramAndFacility.get({programId: $scope.selectedProgram.id, facilityId: $scope.selectedFacilityId, emergency: false},
+            PeriodsForProgramAndFacility.get({programId: $scope.selectedProgram.id,
+             facilityId: $scope.selectedFacilityId, emergency: false},
                 function (data) {
                     $scope.error = "";
                     $scope.isEmergency = false;
@@ -219,7 +227,8 @@
         };
 
         $scope.initRnr = function (selectedPeriod) {
-            var data = {selectedType: $scope.selectedType, selectedProgram: $scope.selectedProgram, selectedFacilityId: $scope.selectedFacilityId, isNavigatedBack: true},
+            var data = {selectedType: $scope.selectedType, selectedProgram: $scope.selectedProgram,
+             selectedFacilityId: $scope.selectedFacilityId, isNavigatedBack: true},
                 requisition;
 
             navigateBackService.setData(data);
@@ -231,7 +240,7 @@
                 });
 
             } else {
-                Requisition.initiate({facility: $scope.selectedFacilityId,
+                InitiateRequisition.save({facility: $scope.selectedFacilityId,
                     program: $scope.selectedProgram.id,
                     suggestedPeriod: selectedPeriod.id,
                     emergency: false},                          // TODO emergency (for now always false)
