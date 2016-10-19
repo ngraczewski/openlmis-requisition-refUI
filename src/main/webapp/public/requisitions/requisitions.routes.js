@@ -18,13 +18,11 @@
 			controller: 'RequisitionCtrl',
 			templateUrl: 'requisitions/requisition.html',
 			resolve: {
-				requisition: function ($q, $stateParams, Requisition) {
+				requisition: function ($q, $stateParams, RequisitionFactory) {
 				  var deferred = $q.defer();
 
-				  Requisition.get({
-            id: $stateParams.rnr}
-          ).$promise.then(function(response) {
-				      deferred.resolve(new Rnr(response));
+				  RequisitionFactory.get($stateParams.rnr).$promise.then(function(response) {
+				      deferred.resolve(response);
 				    }, function(response) {
 				      alert('Cannot find requisition with UUID: ' + $stateParams.rnr);
 				      deferred.reject();

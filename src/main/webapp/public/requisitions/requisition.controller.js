@@ -12,24 +12,16 @@
 
     angular.module('openlmis.requisitions').controller('RequisitionCtrl', RequisitionCtrl);
 
-    RequisitionCtrl.$inject = ['$scope', 'requisition', 'RequisitionTemplate', '$stateParams',
-    'Requisition'];
+    RequisitionCtrl.$inject = ['$scope', 'requisition', 'AuthorizationService', 'messageService', '$ngBootbox'];
 
-    function RequisitionCtrl($scope, requisition, RequisitionTemplate, $stateParams, Requisition){
+    function RequisitionCtrl($scope, requisition, AuthorizationService, messageService, $ngBootbox) {
+        $scope.requisition = requisition;
+        $scope.requisitionType = $scope.requisition.emergency ? "requisition.type.emergency" : "requisition.type.regular";
 
-        RequisitionTemplate.get({
-            id: $stateParams.rnr
-        }).$promise.then(function(template) {
-            $scope.columns = template.columnsMap;
-        }).finally(function() {
-            $scope.templateLoaded = true;
-        });
-
-        // NOTE: the state where requisition could be undefined is impossible
-        // because of the resolve from the URL parameter 
-        $scope.rnr = requisition;
-        $scope.requisitionType = $scope.rnr.emergency ? "requisition.type.emergency" : "requisition.type.regular";
-        this.rnr = $scope.rnr;
+        $scope.periodDisplayName = function () {
+            //TODO: This is a temporary solution.
+            return $scope.requisition.processingPeriod.startDate.slice(0,3).join("/") + ' - ' + $scope.requisition.processingPeriod.endDate.slice(0,3).join("/");
+        };
 
         $scope.save = function() {
             Requisition.save({id: this.rnr.id}, this.rnr)
@@ -43,6 +35,22 @@
                 $scope.message = "";
             }
             )
+
+        $scope.authorizeRnr = function() {
+            $ngBootbox.confirm(messageService.get("msg.question.confirmation.authorize")).then(function() {
+                $scope.requisition.$authorize().then(
+                    function(response) {
+                        $ngBootbox.alert(messageService.get('msg.rnr.submitted.success'));
+                    }, function(response) {
+                        $ngBootbox.alert(messageService.get('msg.rnr.authorized.failure'));
+                    }
+                );
+            });
+        };
+
+         $scope.authorizeEnabled = function() {
+            return true;
+            //return ($scope.requisition === "INITIATED" || $scope.requisition === "SUBMITTED") && AuthorizationService.hasPermission("AUTHORIZE_REQUISITION");
         };
     }
 })();

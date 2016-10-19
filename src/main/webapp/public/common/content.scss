@@ -8,7 +8,14 @@
  * You should have received a copy of the GNU Affero General Public License along with this program.  If not, see http://www.gnu.org/licenses.  For additional information contact info$OpenLMIS.org. 
  */
 
-$heading-green: #17888F !default;
+.page {
+  margin: 12px 12px 0px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+  outline: 1px solid #e6e6e6;
+  outline-offset: -7px;
+  background: #fff;
+  padding: 15px 20px 40px;
+}
 
 .home-background {
   background: url(../images/home-glow.png) no-repeat center -70px, #d6d6d6 url(../images/home-bg.png) no-repeat right 530px;
@@ -22,6 +29,7 @@ $heading-green: #17888F !default;
   h2 {
     font-size: 3em;
     font-weight: normal;
+    color: #A0A0A0;
   }
   h3 {
     font-size: 4.2em;
@@ -79,13 +87,6 @@ $heading-green: #17888F !default;
   text-shadow: 0 1px 0 #FFF;
 }
 
-.app-form {
-  padding: 10px;
-  border: 1px solid #e6e6e6;
-  @include box-shadow(inset 1px 1px 0 white);
-  background: #F8F8F8;
-}
-
 .form-row {
   padding: 6px 10px;
   margin: 5px 0;
@@ -133,22 +134,7 @@ span.field-error {
 }
 
 .form-group {
-  position: relative;
-  padding: 16px 0;
-  margin: 20px 0;
-  border-top: 1px solid #A0A0A0;
-  > h3 {
-    display: inline-block;
-    position: absolute;
-    padding: 0 10px;
-    margin-left: 10px;
-    background: #F8F8F8;
-    top: -23px;
-    left: 10px;
-    font-size: 1.2em;
-    line-height: 24px;
-    color: #168e96;
-  }
+  @include titles-with-center-line;
   .form-row {
     padding: 0;
     margin: 6px 0;
@@ -1038,7 +1024,7 @@ h3 {
 }
 
 .button-row {
-  padding: 7px 0;
+  padding: 5px 0;
 }
 
 .total-cost {
@@ -1784,6 +1770,13 @@ input[placeholder].placeholder {
   }
   .ui-grid-cell {
     background: inherit !important;
+    input[type="button"] {
+      padding: 0.3em 1em;
+      height: auto;
+      width: auto;
+      border-radius: 4px;
+      color: #FFF;
+    }
   }
 }
 
@@ -2554,7 +2547,7 @@ div.input-div[disabled] {
     }
   }
   .btn {
-    padding: 4px 11px;
+    padding: 0.5em 1em;
     float: right;
     border: 0;
     border-left: 1px solid #bbb;
@@ -3025,46 +3018,6 @@ input[type="checkbox"].facilityCheckbox {
 
 .text-row, tr.text-row{
   height: 35px;
-}
-
-/*
-Content style
-
-This is content style used in OpenLMIS.
-
-markup:
-<div class="logo clearfix">
-  <h1>OpenLMIS</h1>
-</div>
-<div class="content">
-  <h2>Content style title</h2>
-  <p>This is a sample paragraph</p>
-  <ul>
-    <li>List item</li>
-    <li>Another list item</li>
-  </ul>
-</div>
-
-Styleguide 1.1
-*/
-
-.content {
-  min-height: 200px;
-  padding: 10px 15px 40px;
-  margin: 12px 12px 0;
-  @include box-shadow(0 0 5px rgba(0, 0, 0, 0.6));
-  background: white;
-  &.rnr-content {
-    min-height: 600px;
-    padding-bottom: 70px;
-  }
-  h2 {
-    margin-top: 0;
-    border-bottom: 1px solid #d6d6d6;
-    font-size: 1.4em;
-    font-weight: normal;
-    color: $heading-green;
-  }
 }
 
 /*
