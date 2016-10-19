@@ -24,17 +24,18 @@
         };
 
         $scope.save = function() {
-            Requisition.save({id: this.rnr.id}, this.rnr)
-            .$promise.then(
-            function(value) {
-                $scope.message = "Requisition saved successfuly!";
+          $scope.requisition.$save()
+          .then(
+            function(response) {
+                $scope.message = messageService.get('msg.rnr.save.success');
                 $scope.error = "";
             },
-            function(error) {
-                $scope.error = "There was an error saving this requisition.";
+            function(response) {
+                $scope.error = messageService.get('msg.rnr.save.failure');
                 $scope.message = "";
             }
-            )
+          );
+        };
 
         $scope.authorizeRnr = function() {
             $ngBootbox.confirm(messageService.get("msg.question.confirmation.authorize")).then(function() {
@@ -51,6 +52,6 @@
          $scope.authorizeEnabled = function() {
             return true;
             //return ($scope.requisition === "INITIATED" || $scope.requisition === "SUBMITTED") && AuthorizationService.hasPermission("AUTHORIZE_REQUISITION");
-        };
-    }
+         };
+        }
 })();

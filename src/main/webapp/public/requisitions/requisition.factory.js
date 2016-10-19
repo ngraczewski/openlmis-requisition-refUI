@@ -15,6 +15,9 @@
       'authorize': {
         url: RequisitionURL('/api/requisitions/:id/authorize'),
         method: 'PUT'
+      },
+      'save': {
+        method: 'PUT'
       }
     });
 
@@ -28,6 +31,7 @@
       requisition.$promise.then(function(requisition) {
         requisition.$getTemplate = getTemplate;
         requisition.$authorize = authorize;
+        requisition.$save = save;
       });
       return requisition;
     }
@@ -41,6 +45,12 @@
     function authorize() {
       return resource.authorize(
         {id: this.id}, 
+        this).$promise;
+    }
+
+    function save() {
+      return resource.save(
+        {id: this.id},
         this).$promise;
     }
   }
