@@ -53,8 +53,26 @@
             });
         };
 
+        $scope.removeRnr = function() {
+            $ngBootbox.confirm(messageService.get("msg.question.confirmation.deletion")).then(function() {
+                $scope.requisition.$remove().then(
+                    function(response) {
+                        $scope.message = messageService.get('msg.rnr.deletion.success'));
+                        $scope.error = "";
+                    }, function(response) {
+                        $scope.error = messageService.get('msg.rnr.deletion.failure'));
+                        $scope.message = "";
+                    }
+                );
+            });
+        };
+
          $scope.authorizeEnabled = function() {
             return $scope.requisition === "SUBMITTED" && AuthorizationService.hasPermission("AUTHORIZE_REQUISITION");
+        };
+
+         $scope.isPossibleToDelete = function() {
+            return $scope.requisition.status === "INITIATED";
         };
 
         $scope.submitRnr = function() {
