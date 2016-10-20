@@ -4,12 +4,16 @@
 
     angular.module('openlmis.requisitions').factory('PeriodFactory', periodFactory);
 
-    periodFactory.$inject = ['$resource', 'RequisitionURL', 'RequisitionFactory', 'messageService', '$q'];
+    periodFactory.$inject = ['$q', '$resource', 'RequisitionURL'];
 
-    function periodFactory($resource, RequisitionURL, RequisitionFactory, messageService, $q) {
+    function periodFactory($q, $resource, RequisitionURL) {
 
         var resource = $resource(RequisitionURL('/api/requisitions/periods-for-initiate'), {}, {
-            get: {
+            getPeriods: {
+                method: 'GET',
+                isArray: true
+            },
+            getRequisitions: {
                 method: 'GET',
                 isArray: true
             }
@@ -23,52 +27,56 @@
         function get(programId, facilityId, emergency) {
             var deferred = $q.defer();
 
-            resource.get({programId: programId, facilityId: facilityId, emergency: emergency}, function(data) {
-                getPeriodGridLineItems(data, programId, facilityId).then(function(items) {
-                    deferred.resolve(items);
-                }).catch(function() {
-                    deferred.reject();
-                });
-            }, function() {
+            var periods = resource.getPeriods({
+                programId: programId,
+                facilityId: facilityId,
+                emergency: emergency
+            });
+
+            var requisitions = resource.getRequisitions({
+                programId: programId,
+                facilityId: facilityId
+            });
+
+            $q.all([
+                periods.$promise,
+                requisitions.$promise
+            ]).then(function(responses) {
+                deferred.resolve(createPeriods(responses[0], responses[1]));
+            }).finally(function() {
                 deferred.reject();
             });
+
             return deferred.promise;
         }
 
-        function getPeriodGridLineItems(periods, programId, facilityId) {
-            var periodGridLineItems = [],
-                deferred = $q.defer();
-
-            RequisitionFactory.search(programId, facilityId).then(function(data) {
-                periods.forEach(function (period, idx) {
-                    var foundRequisition = null;
-                    data.forEach(function (requisition) {
-                        if (requisition.processingPeriodId == period.id) {
-                            foundRequisition = requisition;
-                        }
-                    });
-                    periodGridLineItems.push(createPeriodGridItem(period, foundRequisition, idx));
-                });
-                deferred.resolve(periodGridLineItems);
-            }, function() {
-                periods.forEach(function (period, idx) {
-                    periodGridLineItems.push(createPeriodGridItem(period, null, idx));
-                });
-                deferred.resolve(periodGridLineItems);
+        function createPeriods(periods, requisitions) {
+            var created = [];
+            angular.forEach(periods, function(period) {
+                var requisition = getRequisitionForPeriod(requisitions, period);
+                created.push(createPeriod(period, requisition));
             });
-
-            return deferred.promise;
+            return created;
         }
 
-        function createPeriodGridItem(period, requisition, idx) {
-            return {
-                name: period.name,
-                startDate: formatDate(period.startDate),
-                endDate: formatDate(period.endDate),
-                rnrStatus: (requisition ? requisition.status : (idx === 0 ? messageService.get("msg.rnr.not.started") : messageService.get("msg.rnr.previous.pending"))),
-                activeForRnr: (idx === 0 ? true : false),
-                rnrId: (requisition ? requisition.id : null)
-            };
+        function getRequisitionForPeriod(requisitions, period) {
+            var toReturn;
+            angular.forEach(requisitions, function(requisition) {
+                if (requisition.processingPeriodId === period.id) {
+                    toReturn = requisition;
+                }
+            });
+            return toReturn;
+        }
+
+        function createPeriod(period, requisition) {
+            return new Period(
+                period.name,
+                formatDate(period.startDate),
+                formatDate(period.endDate),
+                requisition ? requisition.status : undefined,
+                requisition ? requisition.id : undefined
+            );
         }
 
         function formatDate(date) {
